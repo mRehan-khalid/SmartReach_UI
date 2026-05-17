@@ -1,0 +1,54 @@
+<p-dialog
+  header="Verify OTP"
+  [modal]="true"
+  [closable]="false"
+  [style]="{ width: '90vw', maxWidth: '400px' }"
+>
+
+   <button
+    type="button"
+    class="dialog-close"
+    (click)="closeDialog()"
+  >
+    <i class="pi pi-times"></i>
+  </button>
+  <p class="enterOtpText">Enter the 6 digit OTP that was sent to <b>{{ data.email }}</b></p>
+
+  <div class="otp-container"   (paste)="handlePaste($event)">
+
+    <input
+      *ngFor="let digit of otpArray; let i = index; trackBy: trackByIndex"
+      type="text"
+      maxlength="1"
+      class="otp-box"
+      [attr.value]="otpArray[i]"
+      (input)="onInput($event, i)"
+      (keydown)="handleBackspace($event, i)"
+    />
+    
+  </div>
+  <br>
+
+  <div class="button-group">
+  <button
+    pButton
+    type="button"
+    label="{{ loading ? 'Verifying...' : 'Verify OTP' }}"
+    class="p-button-primary"
+    (click)="verifyOtp()"
+    [disabled]="loading"
+  ></button>
+
+  </div>
+  <br>
+
+  <div class="resendText">
+    Didn't receive the code? <button class="resend-link" (click)="resendOtp()" [disabled]="resendDisabled">Resend OTP</button>
+  </div>
+  <br><br>
+
+  <p class="resendCountdown" *ngIf="resendDisabled">
+    You can resend the OTP in : {{ countdown }}s
+  </p>
+
+</p-dialog>
